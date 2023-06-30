@@ -22,9 +22,6 @@ ARG ROUTEROS_IMAGE
 
 COPY "$ROUTEROS_IMAGE" "/routeros/$ROUTEROS_IMAGE"
 
-# Download VDI image from remote site
-RUN wget "$ROUTEROS_PATH" -O "/routeros/$ROUTEROS_IMAGE"
-
 # Copy script to routeros folder
 ADD ["./scripts", "/routeros"]
 
