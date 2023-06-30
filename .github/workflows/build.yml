@@ -13,7 +13,7 @@ name: build
 
 env:
   TEST_TAG: routerostest
-  DEFAULT_VERSION: "7.10.1"
+  ROUTEROS_VERSION: "${{ inputs.ros_version || '7.10.1' }}"
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
 
       - name: Download RouterOS VDI
         run: |
-          curl https://download.mikrotik.com/routeros/${{ inputs.ros_version }}/chr-${{ inputs.ros_version }}.vdi.zip -o routeros.zip
+          curl https://download.mikrotik.com/routeros/$ROUTEROS_VERSION/chr-$ROUTEROS_VERSION.vdi.zip -o routeros.zip
           unzip routeros.zip
 
       - name: Build and export to Docker
@@ -42,8 +42,8 @@ jobs:
           load: true
           tags: ${{ env.TEST_TAG }}
           build-args: |
-            ROUTEROS_VERSION=${{ inputs.ros_version || env.DEFAULT_VERSION }}
-            ROUTEROS_IMAGE=chr-${{ inputs.ros_version }}.vdi
+            ROUTEROS_VERSION=${{ env.ROUTEROS_VERSION }}
+            ROUTEROS_IMAGE=chr-${{ env.ROUTEROS_VERSION }}.vdi
 
       - name: Test
         run: |
@@ -61,6 +61,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          tags: ghcr.io/${{ github.repository }}:${{ inputs.ros_version || env.DEFAULT_VERSION }}
+          tags: ghcr.io/${{ github.repository }}:${{ env.ROUTEROS_VERSION }}
           push: true
-          build-args: ROUTEROS_VERSION=${{ inputs.ros_version || env.DEFAULT_VERSION }}
+          build-args: ROUTEROS_VERSION=${{ env.ROUTEROS_VERSION }}
