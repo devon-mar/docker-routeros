@@ -13,7 +13,7 @@ name: build
 
 env:
   TEST_TAG: routerostest
-  DEFAULT_VERSION: "6.48.6"
+  DEFAULT_VERSION: "7.10.1"
 
 jobs:
   build:
@@ -30,13 +30,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download RouterOS VDI
+        run: |
+          curl https://download.mikrotik.com/routeros/${{ inputs.ros_version }}/chr-${{ inputs.ros_version }}.vdi.zip -o routeros.zip
+          unzip routeros.zip
+
       - name: Build and export to Docker
         uses: docker/build-push-action@v4
         with:
           context: .
           load: true
           tags: ${{ env.TEST_TAG }}
-          build-args: ROUTEROS_VERSION=${{ inputs.ros_version || env.DEFAULT_VERSION }}
+          build-args: |
+            ROUTEROS_VERSION=${{ inputs.ros_version || env.DEFAULT_VERSION }}
+            ROUTEROS_IMAGE=chr-${{ inputs.ros_version }}.vdi
 
       - name: Test
         run: |
