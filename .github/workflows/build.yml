@@ -63,4 +63,6 @@ jobs:
           context: .
           tags: ghcr.io/${{ github.repository }}:${{ env.ROUTEROS_VERSION }}
           push: true
-          build-args: ROUTEROS_VERSION=${{ env.ROUTEROS_VERSION }}
+          build-args: |
+            ROUTEROS_VERSION=${{ env.ROUTEROS_VERSION }}
+            ROUTEROS_IMAGE=chr-${{ env.ROUTEROS_VERSION }}.vdi
