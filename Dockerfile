@@ -1,4 +1,4 @@
-FROM alpine:3.17.3
+FROM alpine:3.21.2
 
 # For access via VNC
 EXPOSE 5900
